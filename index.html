@@ -158,14 +158,16 @@
       </div>
 
       <form id="booking-form" novalidate>
-        <div><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
-        <div><label for="f-org">Club, Festival oder Kollektiv</label><input id="f-org" name="org" required></div>
-        <div><label for="f-date">Datum</label><input id="f-date" name="date" type="date"></div>
-        <div><label for="f-city">Stadt</label><input id="f-city" name="city"></div>
-        <div class="full"><label for="f-msg">Nachricht</label><textarea id="f-msg" name="msg" placeholder="Slot, Timetable, Gage, Line-up" required></textarea></div>
+        <div><label for="f-name">Name</label><input id="f-name" name="fi-sender-fullName" autocomplete="name" required></div>
+        <div><label for="f-email">E-Mail</label><input id="f-email" name="fi-sender-email" type="email" autocomplete="email" required></div>
+        <div><label for="f-org">Club, Festival oder Kollektiv</label><input id="f-org" name="fi-text-organization" required></div>
+        <div><label for="f-date">Datum</label><input id="f-date" name="fi-date-eventdate" type="date"></div>
+        <div class="full"><label for="f-city">Stadt</label><input id="f-city" name="fi-text-city"></div>
+        <div class="full"><label for="f-msg">Nachricht</label><textarea id="f-msg" name="fi-text-message" placeholder="Slot, Timetable, Gage, Line-up" required></textarea></div>
         <p class="full note" id="f-error" role="alert"></p>
-        <button class="btn btn-solid" type="submit">Anfrage senden</button>
-        <p class="full note">Das Formular öffnet dein Mailprogramm mit der fertigen Anfrage an booking@timoschinsky.de.</p>
+        <p class="full note" id="f-ok" role="status" style="color:#fff;font-weight:700"></p>
+        <button class="btn btn-solid" type="submit" id="f-submit">Anfrage senden</button>
+        <p class="full note">Deine Angaben werden über den Formular-Dienst Forminit an booking@timoschinsky.de übermittelt. Mehr dazu in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
       </form>
     </div>
   </section>
@@ -186,6 +188,7 @@
 </footer>
 
 <script src="gigs.js"></script>
+<script src="forminit.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

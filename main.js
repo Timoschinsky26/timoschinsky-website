@@ -40,19 +40,39 @@
     });
   });
 
-  // Booking-Formular -> Mail
+  // Booking-Formular -> Forminit
+  var FORM_ID = '84cjmk6urtd';
   var form = document.getElementById('booking-form');
   var err = document.getElementById('f-error');
+  var ok = document.getElementById('f-ok');
+  var btn = document.getElementById('f-submit');
+  var sending = false;
   form.addEventListener('input', function () { err.textContent = ''; });
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
+    if (sending) return;
     var f = form.elements;
-    if (!f.name.value.trim() || !f.org.value.trim() || !f.msg.value.trim()) {
-      err.textContent = 'Bitte Name, Club und Nachricht ausfüllen.';
+    var name = f['fi-sender-fullName'], mail = f['fi-sender-email'];
+    name.value = name.value.replace(/[\u2018\u2019]/g, "'").replace(/[^\p{L}\p{N} .'_-]/gu, ' ').replace(/\s+/g, ' ').trim();
+    if (!name.value || !mail.value.trim() || !f['fi-text-organization'].value.trim() || !f['fi-text-message'].value.trim()) {
+      err.textContent = 'Bitte Name, E-Mail, Club und Nachricht ausfüllen.';
       return;
     }
-    var body = 'Name: ' + f.name.value + '\nClub/Festival: ' + f.org.value + '\nDatum: ' + (f.date.value || '-') + '\nStadt: ' + (f.city.value || '-') + '\n\n' + f.msg.value;
-    window.location.href = 'mailto:booking@timoschinsky.de?subject=' + encodeURIComponent('Booking-Anfrage: ' + f.org.value) + '&body=' + encodeURIComponent(body);
+    if (!mail.checkValidity()) { err.textContent = 'Bitte eine gültige E-Mail-Adresse eingeben.'; return; }
+    sending = true; btn.disabled = true; btn.textContent = 'Wird gesendet …'; ok.textContent = ''; err.textContent = '';
+    try {
+      var forminit = new Forminit();
+      var res = await forminit.submit(FORM_ID, new FormData(form));
+      if (res && !res.error && res.data && typeof res.data.hashId === 'string') {
+        form.reset();
+        ok.textContent = 'Danke! Deine Anfrage ist angekommen. Ich melde mich so schnell wie möglich.';
+      } else {
+        err.textContent = 'Das hat leider nicht geklappt. Versuch es nochmal oder schreib direkt an booking@timoschinsky.de.';
+      }
+    } catch (x) {
+      err.textContent = 'Das hat leider nicht geklappt. Versuch es nochmal oder schreib direkt an booking@timoschinsky.de.';
+    }
+    sending = false; btn.disabled = false; btn.textContent = 'Anfrage senden';
   });
 
   // Einblenden beim Scrollen
